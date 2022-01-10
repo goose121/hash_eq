@@ -1,7 +1,6 @@
 #![feature(hash_raw_entry)]
 use std::hash::Hash;
 
-pub mod hash_cmp;
 mod ext;
 
 pub use ext::HashMapExt;
@@ -27,15 +26,7 @@ pub use ext::HashMapExt;
 /// `U: Borrow<T>`; default implementations for this behaviour may be
 /// provided when specialization is possible.
 pub trait HashEq<Rhs>
-    where Self: Hash,
-          Rhs: Hash
-{
-    fn hash_eq(&self, rhs: &Rhs) -> bool {
-        use hash_cmp::{DatumHasher, EqTestAcc, EqTestCmp};
-        let mut h = DatumHasher::new(EqTestAcc::default());
-        self.hash(&mut h);
-        let mut h = DatumHasher::new(EqTestCmp::from(h.into_inner()));
-        rhs.hash(&mut h);
-        h.into_inner().result()
-    }
-}
+where Self: Hash,
+      Rhs: Hash
+{}
+
